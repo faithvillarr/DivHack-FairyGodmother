@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from sklearn.cluster import MiniBatchKMeans
 
-# Optimized function to generate a color palette
+# Returns five RGB lists in a list
 def generate_color_palette(image_path, num_colors=5):
     # Load the image
     image = Image.open(image_path)
@@ -22,18 +22,24 @@ def generate_color_palette(image_path, num_colors=5):
     kmeans = MiniBatchKMeans(n_clusters=num_colors, max_iter=50)  # Limit iterations for speed
     kmeans.fit(subsample)
     
-    # Get the cluster centers (dominant colors)
+    # Stores clusters as five lists of rgb values. 
     colors = kmeans.cluster_centers_.astype(int)
+
+    # Convert rgb to hex
+
     
     # Display the palette
-    plt.figure(figsize=(8, 2))
-    plt.title(f'Color Palette ({num_colors} colors)')
-    for i, color in enumerate(colors):
-        plt.subplot(1, num_colors, i + 1)
-        plt.axis('off')
-        plt.imshow([[color]])  # Display each color
-        plt.text(0, 0.5, f'#{color[0]:02X}{color[1]:02X}{color[2]:02X}', va='center', ha='center', fontsize=10)
-    plt.show()
+    # plt.figure(figsize=(8, 2))
+    # plt.title(f'Color Palette ({num_colors} colors)')
+    # for i, color in enumerate(colors):
+    #     plt.subplot(1, num_colors, i + 1)
+    #     plt.axis('off')
+
+    #     plt.imshow([[color]])  # Display each color
+    #     plt.text(0, 0.5, f'#{color[0]:02X}{color[1]:02X}{color[2]:02X}', va='center', ha='center', fontsize=10)
+    # plt.show()
+
+    return colors
 
 
 # Path to your local image
