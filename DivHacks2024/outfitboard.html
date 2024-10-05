@@ -77,14 +77,15 @@
             flex-grow: 1;
             overflow-y: auto;
             position: relative;
-            height: 500px;
+            height: 350px; /* Adjusted height */
+            max-height: 350px;
         }
         .pinterest-section {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             position: relative;
-            height: 500px;
+            height: 500px; /* Pinterest section height */
         }
 
         button, label {
@@ -113,7 +114,7 @@
             overflow-y: auto;
             background-color: #FFF0F5;
             border: 2px solid #8B4513;
-            height: 500px;
+            position: relative;
         }
 
         .draggable {
@@ -125,10 +126,11 @@
             border-radius: 10px;
         }
 
-        /* Styling for images when they are in the Clothing Items box */
-        .clothing-item {
-            width: 70px;
-            height: 70px;
+        /* Ensure images stay within Pinterest board's borders */
+        #pinterest-board {
+            position: relative;
+            overflow: hidden;
+            height: 500px; /* Adjust height of Pinterest Board */
         }
     </style>
 </head>
@@ -171,7 +173,7 @@
                 });
             }
 
-            // Function to allow the clothing items box to accept dropped images
+            // Function to allow any container to accept dropped images
             function allowDrop(ev) {
                 ev.preventDefault();
             }
@@ -180,10 +182,8 @@
                 ev.preventDefault();
                 const id = ev.dataTransfer.getData("text");
                 const draggableElement = document.getElementById(id);
-                const clone = draggableElement.cloneNode(true);  // Clone the image
-                clone.classList.add("clothing-item");  // Resize when added to clothing items
-                clone.style.position = 'static';  // Make it static inside clothing box
-                target.appendChild(clone);  // Append to the target (clothing items box)
+                draggableElement.style.position = 'static';  // Ensure correct position in the target box
+                target.appendChild(draggableElement);  // Move the image to the target box
             }
 
             // Load local images into the Pinterest board
@@ -193,7 +193,7 @@
             const imagePaths = [
                 "clothingImages/grayTop.jpg",
                 "clothingImages/leatherJacket.jpg"
-            ];
+            ]
 
             imagePaths.forEach((path, index) => {
                 const img = document.createElement("img");
@@ -207,13 +207,19 @@
                 pinterestBoard.appendChild(img);
             });
 
-            // Allow clothing-items to accept drops
+            // Allow both clothing-items and pinterest-board to accept drops
             clothingItemsBox.addEventListener("dragover", allowDrop);
             clothingItemsBox.addEventListener("drop", function (e) {
                 drop(e, clothingItemsBox);
+            });
+
+            pinterestBoard.addEventListener("dragover", allowDrop);
+            pinterestBoard.addEventListener("drop", function (e) {
+                drop(e, pinterestBoard);
             });
         });
     </script>
 </body>
 </html>
+
 
