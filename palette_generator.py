@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from sklearn.cluster import MiniBatchKMeans
 
+def rgb_to_hex(rgb):
+    return '#{:02x}{:02x}{:02x}'.format(rgb[0], rgb[1], rgb[2]).upper()
+
 # Returns five RGB lists in a list
 def generate_color_palette(image_path, num_colors=5):
     # Load the image
@@ -38,13 +41,14 @@ def generate_color_palette(image_path, num_colors=5):
     #     plt.imshow([[color]])  # Display each color
     #     plt.text(0, 0.5, f'#{color[0]:02X}{color[1]:02X}{color[2]:02X}', va='center', ha='center', fontsize=10)
     # plt.show()
-
-    return colors
-
+    res = ""
+    for i in colors:
+        res += rgb_to_hex(i) + " "
+    return res
 
 # Path to your local image
 image_path = 'clothing-images\sample_image_shirt.jpg'
 
 # Generate and display the color palette
-generate_color_palette(image_path, num_colors=5)
+print(generate_color_palette(image_path, num_colors=5))
 
