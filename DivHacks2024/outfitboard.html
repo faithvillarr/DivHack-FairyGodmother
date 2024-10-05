@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Outfit Generator</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFD1DC;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            display: flex;
+            flex-grow: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+            background-color: #FFD1DC;
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+            object-fit: contain;
+        }
+
+        h1 {
+            display: inline-block;
+            color: #8B4513;
+            font-size: 2.5em;
+            margin: 0;
+        }
+
+        .nav-header {
+            display: flex;
+            background-color: #FFD1DC;
+            overflow: hidden;
+            padding: 10px 0;
+        }
+
+        .nav-header a {
+            float: left;
+            display: block;
+            color: #8B4513;
+            text-align: auto;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+    
+        .nav-header a.active {
+            background-color: #FFD1DC;
+            color: #8B4513;
+        }
+
+        h1 {
+            color: #8B4513;
+            text-align: auto;
+            width: 100%;
+            font-size: 2.5em;
+            margin: 20px 0;
+        }
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            margin-right: 20px;
+            width: 250px;
+        }
+        .upload-section, .clothing-items, .pinterest-section {
+            border: 2px dashed #8B4513;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #FFF0F5;
+        }
+        .upload-section {
+            margin-bottom: 20px;
+        }
+        .clothing-items {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .pinterest-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        button, label {
+            background-color: #8B4513;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .button {
+            background-color: #8B4513; /* Same background color as the Load Board button */
+            color: white;
+            padding: 10px 20px; /* Adjust padding as needed */
+            border-radius: 10px; /* Rounded corners */
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-right: 10px; /* Space between buttons */
+            display: inline-block; /* Make sure it's treated as a button */
+        }
+
+        .button:hover {
+            background-color: #fafafa; /* Slightly lighter shade for hover effect */
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #8B4513;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: #8B4513;
+            margin-top: 0;
+        }
+
+        inline {
+            display: inline;
+        }
+
+        input.dont {
+            opacity: 0;
+        }
+        #pinterest-board {
+            flex-grow: 1;
+            overflow-y: auto;
+            position: relative;
+            background-color: #FFF0F5;
+            border: 2px solid #8B4513;
+            height: 500px;
+        }
+
+        .draggable {
+            position: absolute;
+            cursor: move;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="images/fairylogotransparent.png" alt="Fairy Logo" class="logo">
+        <h1>Fashion Faerie</h1>
+        <a href="outfitboard.html" class="button">Home</a>
+        <a href="outfitupload.html" class="button">Create An Outfit</a>
+    </div>
+
+    <div class="container">
+        <div class="left-column">
+            <div class="upload-section">
+                <h2>UPLOAD</h2>
+                <input type="text" id="pinterest-url" placeholder="Enter Pinterest board URL">
+                <button id="load-pinterest">Load Board</button>
+            </div>
+            <div class="clothing-items">
+                <h2>Clothing Items</h2>
+                <!-- Content for clothing items will go here -->
+                <!-- dragging  -->
+
+
+
+            </div>
+        </div>
+        <div class="pinterest-section">
+            <h2>PINTEREST BOARD</h2>
+            <div id="pinterest-board">
+                <!-- Local images will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Function to make images draggable
+            function makeDraggable(el) {
+                let isDragging = false;
+
+                el.addEventListener("mousedown", function (e) {
+                    isDragging = true;
+                    let offsetX = e.clientX - el.offsetLeft;
+                    let offsetY = e.clientY - el.offsetTop;
+
+                    document.onmousemove = function (e) {
+                        if (isDragging) {
+                            el.style.left = e.clientX - offsetX + "px";
+                            el.style.top = e.clientY - offsetY + "px";
+                        }
+                    };
+
+                    document.onmouseup = function () {
+                        isDragging = false;
+                        document.onmousemove = null;
+                    };
+                });
+            }
+
+            // Load local images into the Pinterest board
+            const pinterestBoard = document.getElementById("pinterest-board");
+            const imagePaths = [
+                "clothingImages/grayTop.jpg",
+                "clothingImages/leatherJacket.jpg"
+            ];
+
+            imagePaths.forEach((path, index) => {
+                const img = document.createElement("img");
+                img.src = path;
+                img.classList.add("draggable");
+                img.style.left = `${index * 110}px`;
+                img.style.top = `${index * 110}px`;
+
+                makeDraggable(img);
+                pinterestBoard.appendChild(img);
+            });
+        });
+    </script>
+</body>
+</html>
