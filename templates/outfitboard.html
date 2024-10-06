@@ -59,7 +59,7 @@
 
         h1 {
             color: #8B4513;
-            text-align: auto;
+            text-align: left;
             width: 100%;
             font-size: 2.5em;
             margin: 20px 0;
@@ -105,7 +105,20 @@
             margin-bottom: 10px;
             font-size: 1em;
         }
-
+        .button {
+            background-color: #8B4513; /* Same background color as the Load Board button */
+            color: white;
+            padding: 10px 20px; /* Adjust padding as needed */
+            border-radius: 10px; /* Rounded corners */
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-right: 10px; /* Space between buttons */
+            display: inline-block; /* Make sure it's treated as a button */
+            height: 50%;
+            align-content: center;
+            text-align: center;
+        }
         .button:hover {
             background-color: #fafafa; /* Slightly lighter shade for hover effect */
         }
@@ -160,6 +173,7 @@
                 <h2>Clothing Items</h2>
                 <!-- Clothing items will be added here -->
                 {% for url in session['closet_urls'] %}
+                <p style="display: none;" id="closet-loop-index {{ loop.index }}"> {{ loop.index }}</p>
                 <img src="{{ url }}" alt="Clothing Image" />
                 {% endfor %}
             </div>
