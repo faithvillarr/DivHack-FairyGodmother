@@ -153,12 +153,16 @@
             <div class="clothing-items" id="clothing-items">
                 <h2>Clothing Items</h2>
                 <!-- Clothing items will be added here -->
+                {% for url in session['closet_urls'] %}
+                <img src="{{ url }}" alt="Clothing Image" />
+                {% endfor %}
             </div>
         </div>
         <div class="pinterest-section">
             <h2>PINTEREST BOARD</h2>
             <div id="pinterest-board">
                 <!-- Local images will be added here -->
+
             </div>
         </div>
     </div>

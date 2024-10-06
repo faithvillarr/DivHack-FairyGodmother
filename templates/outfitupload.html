@@ -10,6 +10,12 @@
             margin: 0;
             padding: 0;
         }
+        /* I ADDED THIS BUT IDK WHAT IM DOING */
+        img{
+            width: 100px;
+            height: 100px;
+        }
+        /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
         body {
             font-family: arial;
             background-color: #FFD1DC;
@@ -177,9 +183,9 @@
         </div>
         <div class="pinterest-section">
             <h2>COLLECTION</h2>
-            <!-- <input type="text" id="pinterest-url" placeholder="Enter Pinterest board URL">
-            <button id="load-pinterest">Load Board</button>
-            <div id="pinterest-board"></div> -->
+            {% for url in session['closet_urls'] %}
+            <img src="{{ url }}" alt="Clothing Image" />
+            {% endfor %}
         </div>
     </div>
     <script>

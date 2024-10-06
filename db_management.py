@@ -96,19 +96,34 @@ def get_user_clothing_instances(username):
 def close_connection():
     client.close()
 
+def grab_closet_urls(username):
+    # Query the database for images associated with the given username
+    images = get_clothing_names(username)  # Use the helper function to get image names
+    
+    # Base URL for S3 bucket (replace with your bucket's actual base URL)
+    s3_base_url = "https://fairyclothing.s3.us-east-2.amazonaws.com/"
+    
+    # Create full URLs by appending image names to the base URL
+    image_urls = [f"{s3_base_url}{image_name}" for image_name in images]
+    
+    # Return the list of URLs
+    return image_urls
+
 # Example usage
 if __name__ == "__main__":
-    # Create a new user
-    create_user("Jane", "Doe", "janedoe", "jane@example.com", "mypassword")
+    print(grab_closet_urls('janedoe'))
+    
+    # # Create a new user
+    # create_user("Jane", "Doe", "janedoe", "jane@example.com", "mypassword")
 
-    # Upload a clothing image
-    image_path = 'clothing-images/sample_image_shirt.jpg'
-    upload_clothing_image(image_path, "janedoe")  # Example RGB colors
+    # # Upload a clothing image
+    # image_path = 'clothing-images/sample_image_shirt.jpg'
+    # upload_clothing_image(image_path, "janedoe")  # Example RGB colors
 
-    # Retrieve clothing instances for a user
-    clothing_instances = get_user_clothing_instances("janedoe")
-    for i in clothing_instances:
-        print(i)
+    # # Retrieve clothing instances for a user
+    # clothing_instances = get_user_clothing_instances("janedoe")
+    # for i in clothing_instances:
+    #     print(i)
     
     # print(clothing_instances)
     # for image in clothing_instances:
@@ -117,7 +132,4 @@ if __name__ == "__main__":
     # Close the connection
     close_connection()
     
-
-
-
 
