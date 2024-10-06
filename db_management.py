@@ -75,6 +75,23 @@ def get_clothing_names(username):
     image_names = [image.get("image-name") for image in images]
     return image_names
 
+def get_clothing_info(username):
+    # Query the database for images associated with the given username
+    images = image_collection.find({"username": username})
+    
+    # Create a list to hold the clothing info
+    clothing_info = []
+    
+    # Iterate through the cursor and append each document to the list
+    for image in images:
+        clothing_info.append({
+            "image_name": image.get("image-name"),
+            "username": image.get("username"),
+            "rgb_colors": image.get("rgb_colors"),
+            "clothing_type": image.get("clothing-type")
+        })
+    return clothing_info
+
 
 # Function to get clothing instances for a specific user
 def get_user_clothing_instances(username):
@@ -112,6 +129,7 @@ def grab_closet_urls(username):
 
 # Example usage
 if __name__ == "__main__":
+    get_clothing_info('janedoe')
     # upload_clothing_image('static/baggyPants.jpg', 'janedoe', 'bottoms')
     # upload_clothing_image('static/dressPants.jpg', 'janedoe', 'bottoms')
     # upload_clothing_image('static/grayTop.jpg', 'janedoe', 'top')

@@ -126,4 +126,5 @@ if __name__ == "__main__":
     MAX_PINS = 20  # Set the maximum number of pins you want to download
     CHROMEDRIVER_PATH = "C:\Program Files\Google\Chrome"
 
-    choose_pin(board_url).show()
+    print(type(choose_pin(board_url)))
+    print(type(Image))

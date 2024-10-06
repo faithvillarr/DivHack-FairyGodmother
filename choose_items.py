@@ -1,10 +1,11 @@
 # 1. create separate lists of types from the database
-# 2. iterate through each type, finding the item that most closely matches the palette
+# 2. iterate through each clothing_type, finding the item that most closely matches the palette
 # 3. return the chosen set of items
 
 # NOTE: two functions left to implement: reading items and palette from database, and (DONE)comparing hex vals <3
+from db_management import get_clothing_info
 
-def hex_color_delta(hex1, hex2):
+def compare_hex(hex1, hex2):
     # Get red/green/blue int values of hex1
     r1 = int(hex1[0:2], 16)
     g1 = int(hex1[2:4], 16)
@@ -27,8 +28,22 @@ def hex_color_delta(hex1, hex2):
     
     return (r + g + b) / 3
 
-def pull_from_database():
-    return 1
+def pull_from_database(username):
+    # Get hex values of each clothing belonging to user for each clothing clothing_type
+    clothing_types = ['top', 'bottoms', 'dress', 'shoes', 'outerwear', 'accessories']
+    clothing_items = {clothing_type: [] for clothing_type in clothing_types}
+    
+    # Query the database for clothing items associated with the user
+    items = get_clothing_info(username)
+    
+    for item in items:
+        clothing_type = item['clothing_type']
+        clothing_items[clothing_type].append([item['image_name'], item['rgb_colors']])
+
+    # hex_list = hex_colors.strip().split()
+    
+    return clothing_items
+
 
 
 def find_closest_matches(palette):
@@ -37,15 +52,15 @@ def find_closest_matches(palette):
     similarities = {}
 
     for i in range(3):
-        type = lists[i]
+        clothing_type = lists[i] # Chooses shirt, then botooms, dress, etc.
         max_similarity = 0
         max_item = None
-        for item in type:
-            hex = compare_hex(item, palette, type)
+        for item in clothing_type:
+            hex = compare_hex(item, palette, clothing_type)
             if hex > max_similarity:
                 max_similarity = hex
                 max_item = item
-        similarities[type] = (max_item, max_similarity)
+        similarities[clothing_type] = (max_item, max_similarity)
 
         # choose dress or top/bottom
         if max(similarities["top"][1], similarities["bottom"][1]) < similarities["dress"][1]:
@@ -53,15 +68,15 @@ def find_closest_matches(palette):
         else:
             items = ["top", "bottom", "shoes", "outerwear", "accessories"]
 
-    for type in items:
+    for clothing_type in items:
         final_items = []
-        if not similarities[type] or (similarities[type] and type == "accessories"):
-            if similarities[type]: # account for the second accessories item
-                type.remove(similarities[type][0]) # remove the max item
+        if not similarities[clothing_type] or (similarities[clothing_type] and clothing_type == "accessories"):
+            if similarities[clothing_type]: # account for the second accessories item
+                clothing_type.remove(similarities[clothing_type][0]) # remove the max item
             max_similarity = 0
             max_item = None
-            for item in type:
-                hex = compare_hex(item, palette, type)
+            for item in clothing_type:
+                hex = compare_hex(item, palette, clothing_type)
                 if hex > max_similarity:
                     max_similarity = hex
                     max_item = item
@@ -69,4 +84,5 @@ def find_closest_matches(palette):
     
     return final_items
 
-find_closest_matches(palette)
+if __name__ == "__main__":
+    print(pull_from_database('janedoe'))
