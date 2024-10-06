@@ -47,7 +47,7 @@ def get_pins_from_board_with_scroll(board_url, max_pins=50):
     chrome_options.add_argument("--headless")  # Uncomment if you want to run in headless mode
 
     # Provide path to your ChromeDriver
-    driver_service = Service(executable_path=CHROMEDRIVER_PATH)  # Update with the actual path to your chromedriver
+    driver_service = Service()  # Update with the actual path to your chromedriver
     driver = webdriver.Chrome(service=driver_service, options=chrome_options)
 
     # Open the Pinterest board URL
@@ -121,9 +121,9 @@ def choose_pin(board_url):
         print("Initial run failed to download " + str(MAX_PINS) + " pins. Trying again...")
         choose_pin(board_url)
 
+if __name__ == "__main__":
+    board_url = "https://www.pinterest.com/bookeater999/fall-2024/"  # Replace with actual Pinterest board URL
+    MAX_PINS = 20  # Set the maximum number of pins you want to download
+    CHROMEDRIVER_PATH = "C:\Program Files\Google\Chrome"
 
-board_url = "https://www.pinterest.com/bookeater999/fall-2024/"  # Replace with actual Pinterest board URL
-MAX_PINS = 20  # Set the maximum number of pins you want to download
-CHROMEDRIVER_PATH = "/Users/isabelsnyder/.wdm/drivers/chromedriver/mac64/129.0.6668.89/chromedriver-mac-x64/chromedriver"
-
-choose_pin(board_url)
+    choose_pin(board_url).show()

@@ -42,7 +42,7 @@ def create_user(first_name, last_name, username, email, password):
     return True
 
 # Function to upload an image
-def upload_clothing_image(image_path, username):
+def upload_clothing_image(image_path, username, clothing_type):
     # Check if the user exists
     if not user_collection.find_one({"username": username}):
         print("User does not exist!")
@@ -58,7 +58,8 @@ def upload_clothing_image(image_path, username):
     image_document = {
         "image-name": obj_name,
         "username": username,
-        "rgb_colors": colors
+        "rgb_colors": colors,
+        "clothing-type": clothing_type
     }
     
     image_collection.insert_one(image_document)
@@ -111,7 +112,11 @@ def grab_closet_urls(username):
 
 # Example usage
 if __name__ == "__main__":
-    print(grab_closet_urls('janedoe'))
+    # upload_clothing_image('static/baggyPants.jpg', 'janedoe', 'bottoms')
+    # upload_clothing_image('static/dressPants.jpg', 'janedoe', 'bottoms')
+    # upload_clothing_image('static/grayTop.jpg', 'janedoe', 'top')
+    # upload_clothing_image('static/leatherJacket.jpg', 'janedoe', 'outerwear')
+    # upload_clothing_image('static/nikes.jpg', 'janedoe', 'shoes')
     
     # # Create a new user
     # create_user("Jane", "Doe", "janedoe", "jane@example.com", "mypassword")
