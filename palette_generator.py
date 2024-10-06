@@ -7,9 +7,8 @@ def rgb_to_hex(rgb):
     return '#{:02x}{:02x}{:02x}'.format(rgb[0], rgb[1], rgb[2]).upper()
 
 # Returns five RGB lists in a list
-def generate_color_palette(image_path, num_colors=5):
-    # Load the image
-    image = Image.open(image_path)
+# Input: Image type
+def generate_color_palette(image, num_colors=5):
     
     # Aggressively resize the image to reduce computation
     image = image.resize((50, 50))  # Small size for faster processing
@@ -46,9 +45,5 @@ def generate_color_palette(image_path, num_colors=5):
         res += rgb_to_hex(i) + " "
     return res
 
-# Path to your local image
-image_path = 'clothing-images\sample_image_shirt.jpg'
 
-# Generate and display the color palette
-print(generate_color_palette(image_path, num_colors=5))
 

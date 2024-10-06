@@ -4,6 +4,8 @@ from palette_generator import generate_color_palette
 
 from accessing_s3 import upload_file_to_s3
 from accessing_s3 import download_image_from_s3
+from PIL import Image
+
 
 
 # Replace with your actual MongoDB connection string
@@ -50,7 +52,8 @@ def upload_clothing_image(image_path, username):
     obj_name = upload_file_to_s3(image_path)
     if obj_name is None:
         return False
-    colors = generate_color_palette(image_path)
+    image = Image.open(image_path)
+    colors = generate_color_palette(image)
     
     # Create a clothing image document
     image_document = {
