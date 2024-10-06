@@ -51,7 +51,6 @@ def upload_file_to_s3(file_name, object_name=None):
         print(f"An error occurred during upload: {e}")
         return None
 
-
 # Input the object name and then return the image
 def download_image_from_s3(object_name):
     # Create an S3 client
@@ -79,3 +78,6 @@ def download_image_from_s3(object_name):
         print(f"An error occurred: {e}")
         return False
 
+if __name__ == "__main__":
+    image = download_image_from_s3("sample_image_shirt.jpg")
+    image.show()

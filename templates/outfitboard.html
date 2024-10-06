@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome - Outfit Generator</title>
     <style>
+        /* I ADDED THIS BUT IDK WHAT IM DOING */
+        img{
+            width: 100px;
+            height: 100px;
+        }
+        /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
         html, body {
             height: 100%;
             margin: 0;
@@ -153,12 +159,16 @@
             <div class="clothing-items" id="clothing-items">
                 <h2>Clothing Items</h2>
                 <!-- Clothing items will be added here -->
+                {% for url in session['closet_urls'] %}
+                <img src="{{ url }}" alt="Clothing Image" />
+                {% endfor %}
             </div>
         </div>
         <div class="pinterest-section">
             <h2>PINTEREST BOARD</h2>
             <div id="pinterest-board">
                 <!-- Local images will be added here -->
+
             </div>
         </div>
     </div>
