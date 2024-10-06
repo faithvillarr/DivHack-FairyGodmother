@@ -7,7 +7,6 @@ from accessing_s3 import download_image_from_s3
 from PIL import Image
 
 
-
 # Replace with your actual MongoDB connection string
 connection_string = "mongodb+srv://faithmvillarreal:Z0jvySKubC8uShGx@fairycluster.0fyob.mongodb.net/y"
 client = MongoClient(connection_string)

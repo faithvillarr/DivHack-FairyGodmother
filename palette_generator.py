@@ -27,23 +27,12 @@ def generate_color_palette(image, num_colors=5):
     # Stores clusters as five lists of rgb values. 
     colors = kmeans.cluster_centers_.astype(int)
 
-    # Convert rgb to hex
-
-    
-    # Display the palette
-    # plt.figure(figsize=(8, 2))
-    # plt.title(f'Color Palette ({num_colors} colors)')
-    # for i, color in enumerate(colors):
-    #     plt.subplot(1, num_colors, i + 1)
-    #     plt.axis('off')
-
-    #     plt.imshow([[color]])  # Display each color
-    #     plt.text(0, 0.5, f'#{color[0]:02X}{color[1]:02X}{color[2]:02X}', va='center', ha='center', fontsize=10)
-    # plt.show()
     res = ""
     for i in colors:
         res += rgb_to_hex(i) + " "
-    return res
+        
+    # Returns the five HEX values in a string. 
+    return res 
 
 
 

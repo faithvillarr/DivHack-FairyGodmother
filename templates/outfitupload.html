@@ -152,10 +152,10 @@
 </head>
 <body>
     <div class="header">
-        <img src="images/fairylogotransparent.png" alt="Fairy Logo" class="logo">
+        <img src="{{ url_for('static', filename='fairylogotransparent.png') }}" alt="Fairy Logo" class="logo">
         <h1>Fashion Faerie</h1>
-        <a href="outfitboard.html" class="button">Home</a>
-        <a href="outfitupload.html" class="button">Create An Outfit</a>
+        <a href="{{ url_for('outfit_board') }}" class="button">Home</a>
+        <a href="{{ url_for('main') }}" class="button">Create An Outfit</a>
     </div>
     <div class="container">
         <div class="left-column">
