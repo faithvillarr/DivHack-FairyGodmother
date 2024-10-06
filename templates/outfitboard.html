@@ -15,14 +15,15 @@
             margin: 0;
             padding: 0;
         }
-        
+
         body {
-            font-family: arial;
+            font-family: Fantasy;
             background-color: #FFD1DC;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
+
         .container {
             display: flex;
             flex-grow: 1;
@@ -37,14 +38,13 @@
             padding: 20px;
             background-color: #FFD1DC;
         }
-        
+
         .logo {
             width: 100px;
             height: 100px;
             margin-right: 20px;
             object-fit: contain;
         }
-
         h1 {
             color: #8B4513;
             font-size: 2.5em;
@@ -79,6 +79,7 @@
             font-size: 2.5em;
             margin: 20px 0;
         }
+
         .left-column {
             display: flex;
             text-align: center;
@@ -86,24 +87,47 @@
             margin-right: 20px;
             width: 400px;
         }
+
         .upload-section, .clothing-items, .pinterest-section {
             border: 2px dashed #8B4513;
             padding: 20px;
             border-radius: 15px;
             background-color: #FFF0F5;
         }
+
         .upload-section {
             margin-bottom: 20px;
         }
+
+        /* Structured grid layout for Clothing Items box */
         .clothing-items {
             flex-grow: 1;
-            overflow-y: auto;
+            max-height: 300px; /* Set a maximum height to enable scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Responsive grid layout */
+            gap: 10px;
+            padding: 10px;
         }
+
+        .clothing-items h2 {
+            text-align: center;
+            margin: 0 0 10px;
+        }
+
+        .clothing-items img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
         .pinterest-section {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
+
         button, label {
             background-color: #8B4513;
             color: white;
@@ -119,13 +143,13 @@
         .button {
             background-color: #8B4513; /* Same background color as the Load Board button */
             color: white;
-            padding: 10px 20px; /* Adjust padding as needed */
-            border-radius: 10px; /* Rounded corners */
+            padding: 10px 20px;
+            border-radius: 10px;
             border: none;
             cursor: pointer;
             font-size: 1.2rem;
-            margin-right: 10px; /* Space between buttons */
-            display: inline-block; /* Make sure it's treated as a button */
+            margin-right: 10px;
+            display: inline-block;
             height: 50%;
             align-content: center;
             text-align: center;    
@@ -140,31 +164,40 @@
             margin-top: 0;
         }
 
-        #pinterest-board, .clothing-items {
-            flex-grow: 1;
-            overflow-y: auto;
-            background-color: #FFF0F5;
-            border: 2px solid #8B4513;
+        /* Pinterest board styles */
+        #pinterest-board {
             position: relative;
+            overflow: hidden;
+            height: 500px;
+            background-color: #fff7f6;
+            border: 2px solid #8B4513;
         }
 
         .draggable {
             cursor: move;
-            position: absolute;
+            position: absolute; /* So items can be placed anywhere in the Pinterest board */
             width: 100px;
             height: 100px;
             object-fit: cover;
             border-radius: 10px;
         }
 
-        #pinterest-board {
-            position: relative;
-            overflow: hidden;
-            height: 500px;
+        /* Clothing items drag styles */
+        .clothing-items img {
+            position: static; /* Reset position for grid layout */
+        }
+
+        .fairy {
+            position: absolute;
+            width: 80px; /* Adjust size as necessary */
+            z-index: 10; /* Ensure fairy appears above other elements */
+            transition: left 0.5s ease, top 0.5s ease; /* Smooth transition for movement */
         }
     </style>
 </head>
 <body>
+    <img src="{{ url_for('static', filename='fairytransparent.png') }}" alt="Flying Fairy" class="fairy" id="fairy"> <!-- Add the fairy image here -->
+
     <div class="header">
         <img src="{{ url_for('static', filename='fairylogotransparent.png') }}" alt="Fairy Logo" class="logo">
         <h1>Fashion Faerie</h1>
@@ -203,24 +236,44 @@
                 });
             }
 
-            // Allow drop function to accept the image drop
+            // Allow drop function to accept image drop
             function allowDrop(ev) {
                 ev.preventDefault();
             }
 
-            // Drop event to move items between boards
-            function drop(ev, target) {
+            // Drop event for Pinterest board, user places images freely
+            function dropInPinterest(ev, target) {
                 ev.preventDefault();
                 const id = ev.dataTransfer.getData("text");
                 const draggableElement = document.getElementById(id);
-                draggableElement.style.left = `${Math.random() * (target.clientWidth - draggableElement.clientWidth)}px`;
-                draggableElement.style.top = `${Math.random() * (target.clientHeight - draggableElement.clientHeight)}px`;
+                const rect = target.getBoundingClientRect();
+
+                // Get the mouse position relative to the Pinterest board
+                const x = ev.clientX - rect.left;
+                const y = ev.clientY - rect.top;
+
+                // Position the element based on where the user dropped it
+                draggableElement.style.left = `${x - draggableElement.clientWidth / 2}px`;
+                draggableElement.style.top = `${y - draggableElement.clientHeight / 2}px`;
+                draggableElement.style.position = 'absolute'; // Make sure it's absolute to be draggable on board
+
                 target.appendChild(draggableElement);
             }
 
-            // Load images dynamically on page load into Pinterest board
+            // Drop event for Clothing Items box
+            function dropInClothingItems(ev) {
+                ev.preventDefault();
+                const id = ev.dataTransfer.getData("text");
+                const draggableElement = document.getElementById(id);
+                const clothingItemsBox = document.getElementById("clothing-items");
+
+                // Add the dragged image to the Clothing Items box
+                clothingItemsBox.appendChild(draggableElement);
+                draggableElement.style.position = 'static'; // Reset position for structured layout
+            }
+
+            // Load images dynamically into the Pinterest board
             const pinterestBoard = document.getElementById("pinterest-board");
-            const clothingItemsBox = document.getElementById("clothing-items");
 
             const imagePaths = [
                 "{{ url_for('static', filename='grayTop.jpg') }}",
@@ -230,14 +283,12 @@
                 "{{ url_for('static', filename='dressPants.jpg') }}"
             ];
 
-            // On page load, add all images to Pinterest board at random positions
+            // Add images to Pinterest Board
             imagePaths.forEach((path, index) => {
                 const img = document.createElement("img");
                 img.src = path;
                 img.classList.add("draggable");
                 img.id = `draggable-${index}`;
-
-                // Random positioning inside the Pinterest board
                 img.style.left = `${Math.random() * (pinterestBoard.clientWidth - 100)}px`;
                 img.style.top = `${Math.random() * (pinterestBoard.clientHeight - 100)}px`;
 
@@ -245,18 +296,31 @@
                 pinterestBoard.appendChild(img);
             });
 
-            // Allow both clothing-items and pinterest-board to accept drops
-            clothingItemsBox.addEventListener("dragover", allowDrop);
-            clothingItemsBox.addEventListener("drop", function (e) {
-                drop(e, clothingItemsBox);
-            });
-
+            // Enable drop functionality for the Pinterest board
             pinterestBoard.addEventListener("dragover", allowDrop);
             pinterestBoard.addEventListener("drop", function (e) {
-                drop(e, pinterestBoard);
+                dropInPinterest(e, pinterestBoard);
             });
+
+            // Enable drop functionality for the Clothing Items box
+            const clothingItemsBox = document.getElementById("clothing-items");
+            clothingItemsBox.addEventListener("dragover", allowDrop);
+            clothingItemsBox.addEventListener("drop", dropInClothingItems);
+
+            // Fairy movement
+            const fairy = document.getElementById("fairy");
+            const moveFairy = () => {
+                const x = Math.random() * (window.innerWidth - 80); // Random x position
+                const y = Math.random() * (window.innerHeight - 80); // Random y position
+
+                fairy.style.left = `${x}px`;
+                fairy.style.top = `${y}px`;
+            };
+
+            setInterval(moveFairy, 2000); // Move fairy every 2 seconds
         });
     </script>
 </body>
 </html>
+
 
