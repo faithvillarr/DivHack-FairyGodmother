@@ -4,9 +4,20 @@
 
 # NOTE: two functions left to implement: reading items and palette from database, and (DONE)comparing hex vals <3
 from db_management import get_clothing_info
+from choose_pin_from_board import choose_pin
+from palette_generator import generate_color_palette
+
+def compare_five_hex (hex_l1, hex_l2):
+    similarity_sum = 0 # higher == less similar
+    for i in hex_l1:
+        for j in hex_l2:
+            similarity_sum = compare_hex(i, j)
 
 def compare_hex(hex1, hex2):
     # Get red/green/blue int values of hex1
+    hex1 = hex1[1:]
+    hex2 = hex2[1:]
+
     r1 = int(hex1[0:2], 16)
     g1 = int(hex1[2:4], 16)
     b1 = int(hex1[4:6], 16)
@@ -46,21 +57,24 @@ def pull_from_database(username):
 
 
 
-def find_closest_matches(palette):
-    lists = pull_from_database() # tops {item: hex}, bottoms, dresses, shoes, outerwear, accessories
+def find_closest_matches(username, palette):
+    lists = pull_from_database(username) # tops {item: hex}, bottoms, dresses, shoes, outerwear, accessories
 
     similarities = {}
+    items = []
 
-    for i in range(3):
-        clothing_type = lists[i] # Chooses shirt, then botooms, dress, etc.
+    for i in ['top', 'bottoms', 'dress']: # Looking at shirt, bottoms and dresses.
+        clothing_type = lists[i] # Returns list of lists. Inner list holds [name, hex_string]
         max_similarity = 0
         max_item = None
         for item in clothing_type:
-            hex = compare_hex(item, palette, clothing_type)
-            if hex > max_similarity:
-                max_similarity = hex
+            hex_values = item[1].strip().split()
+            print(hex_values)
+            curr_similarity_score = compare_hex(palette, clothing_type)
+            if curr_similarity_score > max_similarity:
+                max_similarity = curr_similarity_score
                 max_item = item
-        similarities[clothing_type] = (max_item, max_similarity)
+        similarities[i] = (max_item, max_similarity)
 
         # choose dress or top/bottom
         if max(similarities["top"][1], similarities["bottom"][1]) < similarities["dress"][1]:
@@ -68,21 +82,32 @@ def find_closest_matches(palette):
         else:
             items = ["top", "bottom", "shoes", "outerwear", "accessories"]
 
-    for clothing_type in items:
-        final_items = []
-        if not similarities[clothing_type] or (similarities[clothing_type] and clothing_type == "accessories"):
-            if similarities[clothing_type]: # account for the second accessories item
-                clothing_type.remove(similarities[clothing_type][0]) # remove the max item
-            max_similarity = 0
-            max_item = None
-            for item in clothing_type:
-                hex = compare_hex(item, palette, clothing_type)
-                if hex > max_similarity:
-                    max_similarity = hex
-                    max_item = item
-            final_items.append(max_item)
+    for clothing_type in items: # literally the clothing_type
+        found_clothing = lists[clothing_type]
+        final_items = [] # Store object names to retrieve later from database
+
+        for item in found_clothing:
+            if not similarities[clothing_type] or (similarities[clothing_type] and clothing_type == "accessories"):
+                if similarities[clothing_type]: # account for the second accessories item
+                    clothing_type.remove(similarities[clothing_type][0]) # remove the max item
+                max_similarity = 0
+                max_item = None
+                for obj_name, hex_vals in item:
+                    hex_values = item[1].strip().split()
+                    curr_hex_val = compare_hex(palette, hex_vals)
+                    if curr_hex_val > max_similarity:
+                        max_similarity = curr_hex_val
+                        max_item = item
+                final_items.append(max_item)
     
     return final_items
 
 if __name__ == "__main__":
-    print(pull_from_database('janedoe'))
+    board_url = "https://www.pinterest.com/bookeater999/fall-2024/"  # Replace with actual Pinterest board URL
+    MAX_PINS = 20  # Set the maximum number of pins you want to download
+    CHROMEDRIVER_PATH = "C:\Program Files\Google\Chrome"
+    palette = generate_color_palette(choose_pin(board_url))
+    print(palette)
+
+    res = find_closest_matches('janedoe', palette)
+    print(res)

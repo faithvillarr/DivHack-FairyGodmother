@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 import io
 import random
+# from palette_generator import generate_color_palette
 
 # Function to download image from URL
 def collect_image(image_url, save_folder="downloads"):
@@ -108,6 +109,7 @@ def collect_pins_from_board(board_url, max_pins=50, save_folder="downloads"):
     return random.choice(images), len(pin_urls)
 
 
+MAX_PINS = 20
 # Example usage
 def choose_pin(board_url):
     try:
@@ -126,5 +128,5 @@ if __name__ == "__main__":
     MAX_PINS = 20  # Set the maximum number of pins you want to download
     CHROMEDRIVER_PATH = "C:\Program Files\Google\Chrome"
 
-    print(type(choose_pin(board_url)))
-    print(type(Image))
+    # palette = generate_color_palette(choose_pin(board_url))
+    # print(palette)
