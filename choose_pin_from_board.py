@@ -112,10 +112,11 @@ def collect_pins_from_board(board_url, max_pins=50, save_folder="downloads"):
 def choose_pin(board_url):
     try:
         image, num_pins_obtained = collect_pins_from_board(board_url, max_pins=MAX_PINS)
-        Image.open(io.BytesIO(image)).show()
 
         if num_pins_obtained < MAX_PINS:
             choose_pin(board_url)
+        
+        return Image.open(io.BytesIO(image))
     except:
         print("Initial run failed to download " + str(MAX_PINS) + " pins. Trying again...")
         choose_pin(board_url)
