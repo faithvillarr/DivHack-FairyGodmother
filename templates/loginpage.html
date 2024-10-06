@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Outfit Generator</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFD1DC;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #8B4513;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .login-container {
+            border: 2px dashed #8B4513;
+            border-radius: 15px;
+            background-color: #FFF0F5;
+            padding: 30px;
+            width: 300px;
+            text-align: center;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #8B4513;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #8B4513;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #fafafa; /* Slightly lighter shade for hover effect */
+        }
+
+        .link {
+            margin-top: 10px;
+            color: #8B4513;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login</h1>
+    <div class="login-container">
+        <form action="/login" method="POST">
+            <input type="text" placeholder="Username" name="username" required>
+            <input type="password" placeholder="Password" name="password" required>
+            <button type="submit">Log In</button>
+        </form>
+        <a href="/register" class="link">Don't have an account? Register here</a>
+    </div>
+</body>
+</html>
