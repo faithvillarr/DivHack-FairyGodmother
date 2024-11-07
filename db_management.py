@@ -8,7 +8,7 @@ from PIL import Image
 
 
 # Replace with your actual MongoDB connection string
-connection_string = "mongodb+srv://faithmvillarreal:Z0jvySKubC8uShGx@fairycluster.0fyob.mongodb.net/y"
+connection_string = "..."
 client = MongoClient(connection_string)
 
 # Access the databases
